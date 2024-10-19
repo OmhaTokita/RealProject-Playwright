@@ -13,7 +13,7 @@ export class addtoCart {
     constructor (page:Page) {
 
         this.page = page ;
-        var element = this.AddtoCartElements = page.locator ("//button[text()='Add to cart']");
+        var element = this.AddtoCartElements = page.locator ('//button[contains(text(),"Add")]');
         this.checkAddtoCart = page.locator ("");
         
 
@@ -25,8 +25,14 @@ export class addtoCart {
     const buttons = await this.AddtoCartElements.all();
 
     for (const button of buttons) { // Retrieve all matching buttons
-        await button.click();
-        await this.page.waitForTimeout(500); // Optional delay between clicks
+        try {
+            await button.waitFor({ state: 'visible' });
+            await button.click();
+            
+           
+        } catch (error) {
+            console.error('Click failed:', error);
+        }
     }
       
       
